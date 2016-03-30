@@ -63,8 +63,8 @@ class backup_restore_divi_theme_options {
 						<td>
 							<h3>Backup/Export</h3>
 							<p>Here are the stored settings for the current theme:</p>
-							<p><textarea disabled class="widefat code" rows="20" cols="100" onclick="this.select()"><?php echo serialize($this->_get_options()); ?></textarea></p>  <!-- Displays Theme data in textarea --->
-							<p><a href="?page=backup-restore-divi-theme-options&action=download" class="button-secondary">Download as file</a></p> <!-- Downloads Theme data --->
+							<p><textarea disabled class="widefat code" rows="20" cols="100" onclick="this.select()"><?php echo serialize($this->_get_options()); ?></textarea></p>  <!-- Displays Theme data in textarea -->
+							<p><a href="?page=backup-restore-divi-theme-options&action=download" class="button-secondary">Download as file</a></p> <!-- Downloads Theme data -->
 						</td>
 						<td>
 							<h3>Restore/Import</h3>
