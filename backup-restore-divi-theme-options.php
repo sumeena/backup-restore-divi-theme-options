@@ -16,34 +16,34 @@
 class backup_restore_divi_theme_options {
 
 	function backup_restore_divi_theme_options() {
-		add_action('admin_menu', array(&$this, 'admin_menu'));
+		add_action('admin_menu', array(&$this, 'admin_menu')); //shows Backup/Restore Theme Options in admin under tools and divi
 	}
 	function admin_menu() {
 
-		$page = add_submenu_page('tools.php', 'Backup/Restore Theme Options', 'Backup/Restore Theme Options', 'manage_options', 'backup-restore-divi-theme-options', array(&$this, 'options_page'));
+		$page = add_submenu_page('tools.php', 'Backup/Restore Theme Options', 'Backup/Restore Theme Options', 'manage_options', 'backup-restore-divi-theme-options', array(&$this, 'options_page'));  //adds menu under tool menu in admin
 
 		add_action("load-{$page}", array(&$this, 'import_export'));
 
-		add_submenu_page( 'et_divi_options',__( 'Backup/Restore Theme Options', 'Divi' ), __( 'Backup/Restore Theme Options', 'Divi' ), 'manage_options', 'tools.php?page=backup-restore-divi-theme-options', 'backup-restore-divi-theme-options' );
+		add_submenu_page( 'et_divi_options',__( 'Backup/Restore Theme Options', 'Divi' ), __( 'Backup/Restore Theme Options', 'Divi' ), 'manage_options', 'tools.php?page=backup-restore-divi-theme-options', 'backup-restore-divi-theme-options' ); //adds menu under Divi menu in admin
 
 	}
-	function import_export() {
+	function import_export() {                             //function to import and export theme data
 		if (isset($_GET['action']) && ($_GET['action'] == 'download')) {
 			header("Cache-Control: public, must-revalidate");
 			header("Pragma: hack");
 			header("Content-Type: text/plain");
-			header('Content-Disposition: attachment; filename="divi-theme-options-'.date("dMy").'.dat"');
+			header('Content-Disposition: attachment; filename="divi-theme-options-'.date("dMy").'.dat"');  //downloads file with name(divi-theme-options)includeing date month year
 			echo serialize($this->_get_options());
 			die();
 		}
-		if (isset($_POST['upload']) && check_admin_referer('shapeSpace_restoreOptions', 'shapeSpace_restoreOptions')) {
+		if (isset($_POST['upload']) && check_admin_referer('shapeSpace_restoreOptions', 'shapeSpace_restoreOptions')) {   //uploads file in admin 
 			if ($_FILES["file"]["error"] > 0) {
-				// error
+				// error if file is not correct
 			} else {
-				$options = unserialize(file_get_contents($_FILES["file"]["tmp_name"]));
+				$options = unserialize(file_get_contents($_FILES["file"]["tmp_name"]));  
 				if ($options) {
 					foreach ($options as $option) {
-						update_option($option->option_name, unserialize($option->option_value));
+						update_option($option->option_name, unserialize($option->option_value));  //replaces old data with new
 					}
 				}
 			}
@@ -63,8 +63,8 @@ class backup_restore_divi_theme_options {
 						<td>
 							<h3>Backup/Export</h3>
 							<p>Here are the stored settings for the current theme:</p>
-							<p><textarea disabled class="widefat code" rows="20" cols="100" onclick="this.select()"><?php echo serialize($this->_get_options()); ?></textarea></p>
-							<p><a href="?page=backup-restore-divi-theme-options&action=download" class="button-secondary">Download as file</a></p>
+							<p><textarea disabled class="widefat code" rows="20" cols="100" onclick="this.select()"><?php echo serialize($this->_get_options()); ?></textarea></p>  <!--Displays Theme data in textarea--->
+							<p><a href="?page=backup-restore-divi-theme-options&action=download" class="button-secondary">Download as file</a></p><!--Downloads Theme data--->
 						</td>
 						<td>
 							<h3>Restore/Import</h3>
@@ -79,8 +79,9 @@ class backup_restore_divi_theme_options {
 
 	<?php }
 	function _display_options() {
-		$options = unserialize($this->_get_options());
+		$options = unserialize($this->_get_options());            // takes a single serialized variable and converts it back into a PHP value
 	}
+	
 	function _get_options() {
 		global $wpdb;
 		return $wpdb->get_results("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name = 'et_divi'"); // edit 'shapeSpace_options' to match theme options
